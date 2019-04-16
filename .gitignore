@@ -1,0 +1,24 @@
+# Rstudio
+.Rproj.user/
+*.Rproj
+
+# R
+.Rhistory
+.RData
+.Ruserdata
+
+# Data
+*.Rds
+*.Rda
+*.xlsx
+/data/
+/data_raw/
+/report/
+
+# Old
+/.old/
+
+# Bin
+/lib/
+/bin/
+.Rproj.user
