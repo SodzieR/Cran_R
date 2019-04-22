@@ -47,6 +47,23 @@ data_tidy <-
   select(title, id, order_id, doctors_name, date1,
          date2, labtype_raw, test, norm, unit = character, value)
 
+data_tidy <- data_tidy %>%
+  mutate(value_raw = value,
+         value = as.numeric(value))
+
+ # wartości nie-numeryczne:
+#   najczęściej opisowe (np badanie moczu)
+#   rzadziej cenzorowane (rozdzielczość aparatu, np CRP < 0.3)
+# w drugim przypadku można pomyśleć o interpretacji jako 0
+data_tidy %>%
+  filter(are_na(value), !are_na(value_raw)) %>%
+  distinct(value_raw, .keep_all = TRUE) %>%
+  select(panel, value_raw)
+
+ data_tidy <- data_tidy %>%
+  mutate(value = if_else(value_raw == '<0.30' & panel == 'Białko C-reaktywne (CRP)',
+                         0, value))
+
 labtests_mapping <- read.xlsx('C:/Program Files/RStudio/R/Data/meta_clininet.xlsx', sheet_index)
 
 # merging datatables
@@ -54,4 +71,3 @@ data_tidy_mapped <-
   merge(data_tidy, labtests_mapping, by = 'labtype_raw')
 
 # plots
-
