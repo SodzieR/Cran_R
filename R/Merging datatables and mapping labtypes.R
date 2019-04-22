@@ -58,10 +58,10 @@ data_tidy <- data_tidy %>%
 data_tidy %>%
   filter(are_na(value), !are_na(value_raw)) %>%
   distinct(value_raw, .keep_all = TRUE) %>%
-  select(panel, value_raw)
+  select(labtype_raw, value_raw)
 
  data_tidy <- data_tidy %>%
-  mutate(value = if_else(value_raw == '<0.30' & panel == 'Białko C-reaktywne (CRP)',
+  mutate(value = if_else(value_raw == '<0.30' & labtype_raw == 'Białko C-reaktywne (CRP)',
                          0, value))
 
 labtests_mapping <- read.xlsx('C:/Program Files/RStudio/R/Data/meta_clininet.xlsx', sheet_index)
