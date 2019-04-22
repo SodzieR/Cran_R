@@ -70,4 +70,9 @@ labtests_mapping <- read.xlsx('C:/Program Files/RStudio/R/Data/meta_clininet.xls
 data_tidy_mapped <-
   merge(data_tidy, labtests_mapping, by = 'labtype_raw')
 
-# plots
+# loding multiple tables from one sheet
+
+„If that is too much work, 
+then @joran's suggestion will probably work. You could use stringr::str_detect() to identify when 
+a column or row is empty or 
+not empty and then plug that information into the startRow, startCol, endRow, endCol parameters.”
