@@ -14,7 +14,10 @@ library(lubridate)
 # Setup -------------------------------------------------------------------
 
 sheet_index <- 1L
-path <- './data/clininet_sample.xlsx'
+data_path <- './data/clininet_sample.xlsx'
+
+
+# Load --------------------------------------------------------------------
 
 # gathers all informations about cells in the data table
 # and doesn't import blank cells
@@ -23,7 +26,7 @@ data_raw_cells <-
   filter(!is_blank)
 
 # gather info about all cell formating
-cell_format <- xlsx_formats(path, sheet_index)
+cell_format <- xlsx_formats(data_path, sheet_index)
 
 # specifies what kind of format element 'bold' will represent
 bold <- cell_format$local$font$bold
