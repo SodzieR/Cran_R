@@ -61,10 +61,10 @@ data_tidy <- data_tidy %>%
   print(n = 10)
 
 # Ponizsze dotyczy wszystkiego do momentu zaczecia dzialu z example plots
-# Warto�ci nie-numeryczne:
-#   najcz�ciej opisowe (np badanie moczu)
-#   rzadziej cenzorowane (rozdzielczo�� aparatu, np CRP < 0.3)
-# W drugim przypadku mo�na pomy�le� o interpretacji jako 0
+# Warto?ci nie-numeryczne:
+#   najcz??ciej opisowe (np badanie moczu)
+#   rzadziej cenzorowane (rozdzielczo?? aparatu, np CRP < 0.3)
+# W drugim przypadku mo?na pomy?le? o interpretacji jako 0
 
 # Filters data for rows that include non NA values in value col and NA valuees in value_raw col
 # If thats done destinct removes duplicated rows based on value_raw col which were before filtered
@@ -78,7 +78,7 @@ data_tidy %>%
 # Changes results of a labtests for CRP which values are below 0.3 to 0 in value column
 # For rows where case from value_raw col is less than 0.3
 data_tidy <- data_tidy %>%
-  mutate(value = if_else(value_raw == '<0.30' & panel == 'Bia�ko C-reaktywne (CRP)', 0, value))
+  mutate(value = if_else(value_raw == '<0.30' & panel == 'Bia?ko C-reaktywne (CRP)', 0, value))
 
 # Example Plots given by the @mjktfw --------------------------------------
 
@@ -110,13 +110,29 @@ dd %>%
 ddw <- dd %>%
   spread(test, value)
 
-# Creates a plot using dd data for ALT and Bilirubina ca�kowita and their mean labtests values
+# Creates a plot using dd data for ALT and Bilirubina ca?kowita and their mean labtests values
 # X axis is for date of a labtest and Y axis is for its whole day mean; lty is a caption
 # geom_line is needed to visualize how values are changing
 # facet_grid splits a plot into two specified for ALT and Bilb[...]
 # theme_bw specifies about parameters of the plot; look for ggtheme on google 
+
+# nie do końca jest tak, że lty to legenda. lty to skrót od linetype, czyli w
+# sumie rodzaj estetyki (`aesthetic`) wykorzystywany przez warstwę (`layer`)
+# stworzoną przez geom_point(). Automatyczne tworzenie legendy to produkt uboczny tego, jak działa
+# ggplot
+
+# generalnie ggplot działa w modularny sposób: dyrektywa tworzenia obiektu
+# (`ggplot()`) + warstwa/y (np. `geom_point()`) + ew. facetowanie
+# (`facet_grid()/facet_wrap()`) + skale (np scale_x_continuous()`) + legenda
+# (np. `guide_color_continuous`) + motyw (np. `theme_minimal()`) Ponieważ
+# niektóre komponenty posiadają wartości domyślne, lub są liczone w locie na
+# podstawie innych komponentów, to dopóki nie chcesz modyfikować dosłownie
+# wszystkiego, z reguły wystarczy sprecyzować same warstwy
+
+# trzeba będzie się jakoś zgadać na zdalnym pulpicie, to ci pokażę, bo na początku trochę ciężko ogarnąć zasadę działania ggplot
+
 ggplot(dd %>%
-         filter(test %in% c('ALT', 'Bilirubina ca�kowita')),
+         filter(test %in% c('ALT', 'Bilirubina ca?kowita')),
        aes(x = day, y = value, lty = test)) +
   geom_line() +
   facet_grid(test ~ ., scales = 'free') +
