@@ -1,5 +1,9 @@
 # RR_ggplot
 
+###TO DO
+# ~Tidy the data~
+
+
 # Dependencies ------------------------------------------------------------
 
 library(dplyr)
