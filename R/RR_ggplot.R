@@ -12,9 +12,9 @@
 #   pory dnia (dzień/noc - przyjmij 22:00 - 07:00)  - DONE - TCA_day
 #   i całego zapisu                                 - DONE - TCA_allTime
 # wszystko przedstawić na wykresie od czasu         - COULD BE DONE BETTER FOR SURE SOMEHOW
-#  podobny wykres dla odsetka pobudzeń komorowych   _ TO-DO
+#  podobny wykres dla odsetka pobudzeń komorowych   _ DONE
 # przedstawić na wykresie zmienność odstępów RR 
-# w zależności od typu pobudzenia.                  - TO-DO
+# w zależności od typu pobudzenia.                  - DONE FOR ITS SUMS
 
 # Dependencies ------------------------------------------------------------
 
@@ -128,11 +128,27 @@ chambers_time <- data$RR_space_time[data$flag_type == 'V']
 chambers_TCA<- data$TCA[data$flag_type == 'V']
 
 df_chambers <- tibble(ch_RR = chambers_time, ch_TCA = chambers_TCA)
+
+# How does RR changes in every other flag type
+
+RR_changes_N <- sum(data$RR_space_time[data$flag_type == 'N'])
+
+RR_changes_V <- sum(data$RR_space_time[data$flag_type == 'V'])
+
+RR_changes_S <- sum(data$RR_space_time[data$flag_type == 'S'])
+
+RR_changes_X <- sum(data$RR_space_time[data$flag_type == 'X'])
+
+RR_changes_U <- sum(data$RR_space_time[data$flag_type == 'U'])
+
+df_RRchanges <- tibble(RR_type = c('RR_changes_V', 'RR_changes_S',
+                        'RR_changes_X', 'RR_changes_U'),
+                       RR_sum = c(RR_changes_V, RR_changes_S,
+                       RR_changes_X, RR_changes_U))
+
 # ---------------------------------------------------------------------------
 
 # Plots
-
-# Not quite done yet
 
 time_stamp_plot <- data$time_stamp
 
@@ -160,7 +176,12 @@ ggplot(data = df, aes(x = TCA_type, y = spike)) +
   theme_bw()
 
 # Cardiac chambers arousals graph
-
 ggplot(data = df_chambers, aes(x = ch_RR, y = ch_TCA)) +
   geom_line() +
+  theme_bw()
+
+# RR general lengths to the type of RR_type
+ggplot(data = df_RRchanges, aes(x = RR_type, y = RR_sum)) +
+  geom_bar(stat="identity") +
+  geom_text(aes(label = RR_sum), vjust=-0.3, size=3.5)+
   theme_bw()
