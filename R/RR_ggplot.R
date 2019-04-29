@@ -102,17 +102,18 @@ time_day_s <- time_day * 3600
 
 time_normal <- sum(data$RR_space_time[data$flag_type == 'N'])
 
-time_normal_ammount <- length(time_normal)
+table(time_normal)
 
 # Temporary cardiac activity value 
 
 TCA <- 1/data$RR_space_time
 data$TCA <- TCA
+TCA_ammount <- length(TCA)
 
 # Calculating average TCA for hours/day time/whole lab time (seconds)
 # Adding them to the tibble too
 
-TCA_allTime <-  sum(TCA) / time_normal_ammount 
+TCA_allTime <-  sum(TCA) / TCA_ammount 
 TCA_day <- TCA_allTime /  time_day
 TCA_h <- TCA_allTime / time_hours
 TCA_m <- TCA_allTime / time_minutes
