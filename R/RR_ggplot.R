@@ -11,7 +11,7 @@
 #   godzin,                                         - DONE - TCA_h
 #   pory dnia (dzień/noc - przyjmij 22:00 - 07:00)  - DONE - TCA_day
 #   i całego zapisu                                 - DONE - TCA_allTime
-# wszystko przedstawić na wykresie od czasu         - NOT DONE YET
+# wszystko przedstawić na wykresie od czasu         - COULD BE DONE BETTER FOR SURE SOMEHOW
 #  podobny wykres dla odsetka pobudzeń komorowych   _ TO-DO
 # przedstawić na wykresie zmienność odstępów RR 
 # w zależności od typu pobudzenia.                  - TO-DO
@@ -102,8 +102,6 @@ time_day_s <- time_day * 3600
 
 time_normal <- sum(data$RR_space_time[data$flag_type == 'N'])
 
-table(time_normal)
-
 # Temporary cardiac activity value 
 
 TCA <- 1/data$RR_space_time
@@ -123,6 +121,13 @@ data$TCA_day <- TCA_day
 data$TCA_h <- TCA_h
 data$TCA_m <- TCA_m
 
+# Cardiac chambers arousals
+
+chambers_time <- data$RR_space_time[data$flag_type == 'V']
+
+chambers_TCA<- data$TCA[data$flag_type == 'V']
+
+df_chambers <- tibble(ch_RR = chambers_time, ch_TCA = chambers_TCA)
 # ---------------------------------------------------------------------------
 
 # Plots
@@ -131,8 +136,31 @@ data$TCA_m <- TCA_m
 
 time_stamp_plot <- data$time_stamp
 
+# Unclear plot
 ggplot(data = data, aes(x = time_stamp, y = TCA)) +
   geom_line() +
   theme_bw()
 
+# Basic R plot
 plot(data$time_stamp, data$TCA)
+
+# a little bit easier to visualize
+ggplot(data = data, aes(x = time_stamp, y = TCA)) +
+  geom_area() +
+  theme_bw()
+
+# For all variables
+df <- tibble(TCA_type = c('TCA_allTime','TCA_day', 'TCA_h', 'TCA_m'),
+spike = c(1.104741, 0.0345, 0.0221, 0.000368))
+
+
+ggplot(data = df, aes(x = TCA_type, y = spike)) +
+  geom_bar(stat="identity") +
+  geom_text(aes(label = spike), vjust=-0.3, size=3.5)+
+  theme_bw()
+
+# Cardiac chambers arousals graph
+
+ggplot(data = df_chambers, aes(x = ch_RR, y = ch_TCA)) +
+  geom_line() +
+  theme_bw()
