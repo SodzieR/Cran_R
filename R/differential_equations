@@ -1,0 +1,72 @@
+
+# differential_equations_adrian_janucik -------------------------------------
+
+
+# Setup -------------------------------------------------------------------
+
+library(phaseR)
+library(deSolve)
+library(magrittr)
+
+# y' = 2y -----------------------------------------------------------------
+
+
+
+# Function describing the differential equation
+equation_1 <- function(x, y, parameters){
+  dx.dy_1 <- 2*y
+  list(dx.dy_1)
+} 
+
+# We start from y = 0.1 to visualize how the function grows in time
+y <- 0.1
+# As there are no parameters we leave parms <- FALSE | By parms I mean q,p,s,k etc,
+parms1 <- FALSE
+# Now we specify the time in which do we want our differential equation solved
+# times <- 0:100 or times <- seq(0,100,1), but we choose 5 just to make visualization clearer
+
+# Solving the differential equation and plotting it
+e1solution <- ode(y, times = 0:6, func = equation_1, parms1)
+# Descriptive statistics for the solution
+head(e1solution)
+tail(e1solution)
+summary(e1solution)
+# Solution visualisation 
+plot(e1solution ,main = "Rozwiązanie RR y'= 2y", lwd = 2, xlab = "time (y)")
+
+
+
+# Flow field (Error works as a warning)
+equation_1.flowField <- flowField(equation_1, xlim = c(-1, 1), 
+                             ylim = c(-1, 1), parameters = NULL, 
+                             points = 31, system = "one.dim", 
+                             add = FALSE, xlab = "x", ylab = "y", 
+                             main = "Pole kierunków RR y' = 2y", col = "darkblue")+ 
+  grid(col = "black")
+
+
+#  y' = 2x ----------------------------------------------------------------
+
+equation_2 <- function(x, y, parameters){
+  dx.dy_2 <- 2*x
+  list(dx.dy_2)
+} 
+
+parms2 <- FALSE
+
+e2solution <- ode(y = x <- 0.1, times = 0:6, func = equation_2, parms2)
+
+head(e2solution)
+tail(e2solution)
+summary(e2solution)
+
+equation_2.flowField <- flowField(equation_2, xlim = c(-1, 1), 
+                                  ylim = c(-1, 1), parameters = NULL, 
+                                  points = 31, system = "one.dim", 
+                                  add = FALSE, xlab = "x", ylab = "y", 
+                                  main = "Pole kierunków RR y' = 2x")+ grid()
+
+
+
+
+
