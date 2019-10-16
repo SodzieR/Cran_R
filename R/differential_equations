@@ -1,6 +1,6 @@
-
+# https://www.r-bloggers.com/generate-slope-fields-in-r-and-python/
+# https://www.youtube.com/watch?v=RkPGY7_2LQM
 # differential_equations_adrian_janucik -------------------------------------
-
 
 # Setup -------------------------------------------------------------------
 
@@ -13,10 +13,11 @@ library(magrittr)
 
 
 # Function describing the differential equation
+
 equation_1 <- function(x, y, parameters){
   dx.dy_1 <- 2*y
   list(dx.dy_1)
-} 
+}
 
 # We start from y = 0.1 to visualize how the function grows in time
 y <- 0.1
@@ -25,8 +26,18 @@ parms1 <- FALSE
 # Now we specify the time in which do we want our differential equation solved
 # times <- 0:100 or times <- seq(0,100,1), but we choose 5 just to make visualization clearer
 
+# -------------------------------------------------------------------------
+
+# WE CAN MANIPLUATE 'times' VALUE WHEN CREATING 'e1solution' TO CHANGE
+# HOW THE VISUALISATION OF THE SOLUTION IS PRESENTED ON THE LINE CHART
+
+# -------------------------------------------------------------------------
+
+
 # Solving the differential equation and plotting it
+
 e1solution <- ode(y, times = 0:6, func = equation_1, parms1)
+
 # Descriptive statistics for the solution
 head(e1solution)
 tail(e1solution)
@@ -37,12 +48,18 @@ plot(e1solution ,main = "Rozwiązanie RR y'= 2y", lwd = 2, xlab = "time (y)")
 
 
 # Flow field (Error works as a warning)
-equation_1.flowField <- flowField(equation_1, xlim = c(-1, 1), 
+equation1_flowField <- flowField(equation_1, xlim = c(-1, 1), 
                              ylim = c(-1, 1), parameters = NULL, 
                              points = 31, system = "one.dim", 
                              add = FALSE, xlab = "x", ylab = "y", 
                              main = "Pole kierunków RR y' = 2y", col = "darkblue")+ 
   grid(col = "black")
+
+# Nullclines
+
+equation1_nullclines <- nullclines(equation_1,
+                                  xlim = c(-1, 1),
+                                  ylim = c(-1, 1))
 
 
 #  y' = 2x ----------------------------------------------------------------
@@ -54,19 +71,69 @@ equation_2 <- function(x, y, parameters){
 
 parms2 <- FALSE
 
-e2solution <- ode(y = x <- 0.1, times = 0:6, func = equation_2, parms2)
+# -------------------------------------------------------------------------
+
+# MANIPULATING 'times' IN 'e2solution' DOESNT SIGNIFICANTLY IMPACT
+# HOW THE SOLUTION IS VISUALIZED
+
+# -------------------------------------------------------------------------
+
+e2solution <- ode(y = 0, times = 0:100, func = equation_2, parms2)
 
 head(e2solution)
 tail(e2solution)
 summary(e2solution)
 
-equation_2.flowField <- flowField(equation_2, xlim = c(-1, 1), 
-                                  ylim = c(-1, 1), parameters = NULL, 
-                                  points = 31, system = "one.dim", 
-                                  add = FALSE, xlab = "x", ylab = "y", 
-                                  main = "Pole kierunków RR y' = 2x")+ grid()
+plot(e2solution, main = "Rozwiązanie RR y'= 2x", lwd = 2, xlab = "time (y)")+
+  grid()
+
+# Error - arrows are NULL length
+# equation_2.flowField <- flowField(equation_2, xlim = c(-1, 1), 
+#                                  ylim = c(-1, 1), parameters = NULL, 
+#                                  points = 2, system = "one.dim", 
+#                                  add = FALSE, xlab = "x", ylab = "y", 
+#                                  main = "Pole kierunków RR y' = 2x",
+#                                  arrow.type = "equal", arrow.head = 0.1)+ 
+#  grid()
 
 
 
 
 
+# -------------------------------------------------------------------------
+
+
+diff <- function(x,y)
+{
+  return(2*x - 0*y) #Try also x+y
+}
+
+# Line function
+TheLine <- function(x1,y1,slp,d)
+{
+  z = slope*(d-x1)+y1
+  return(z)
+}
+
+# Domains
+x = seq(-20,20,0.5)
+y = seq(-20,20,0.5)
+
+# Points to draw our graph
+x_axis = c(-5,5) 
+y_axis = c(-5,5)
+plot(x_axis, y_axis, main="Pole kierunków RR y' = 2x")+
+  grid(col = "black")
+
+
+# Let's generate the slope field
+for(j in x)
+{
+  for(k in y)
+  {
+    slope = diff(j,k)
+    domain = seq(j-0.07,j+0.07,0.14)
+    z = TheLine(j,k,slope,domain)
+    arrows(domain[1],z[1],domain[2],z[2],length=0.08, col = "blue")
+  }
+}
