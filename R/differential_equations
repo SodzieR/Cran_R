@@ -1,6 +1,5 @@
-# https://www.r-bloggers.com/generate-slope-fields-in-r-and-python/
-# https://www.youtube.com/watch?v=RkPGY7_2LQM
-# differential_equations_adrian_janucik -------------------------------------
+
+# differential_equations_adrian_janucik -----------------------------------
 
 # Setup -------------------------------------------------------------------
 
@@ -49,17 +48,17 @@ plot(e1solution ,main = "Rozwiązanie RR y'= 2y", lwd = 2, xlab = "time (y)")
 
 # Flow field (Error works as a warning)
 equation1_flowField <- flowField(equation_1, xlim = c(-1, 1), 
-                             ylim = c(-1, 1), parameters = NULL, 
-                             points = 31, system = "one.dim", 
-                             add = FALSE, xlab = "x", ylab = "y", 
-                             main = "Pole kierunków RR y' = 2y", col = "darkblue")+ 
+                                 ylim = c(-1, 1), parameters = NULL, 
+                                 points = 31, system = "one.dim", 
+                                 add = FALSE, xlab = "x", ylab = "y", 
+                                 main = "Pole kierunków RR y' = 2y", col = "darkblue")+ 
   grid(col = "black")
 
 # Nullclines
 
 equation1_nullclines <- nullclines(equation_1,
-                                  xlim = c(-1, 1),
-                                  ylim = c(-1, 1))
+                                   xlim = c(-1, 1),
+                                   ylim = c(-1, 1))
 
 
 #  y' = 2x ----------------------------------------------------------------
@@ -75,7 +74,7 @@ parms2 <- FALSE
 
 # MANIPULATING 'times' IN 'e2solution' DOESNT SIGNIFICANTLY IMPACT
 # HOW THE SOLUTION IS VISUALIZED
-
+# differential_equations_adrian_janucik -----------------------------------
 # -------------------------------------------------------------------------
 
 e2solution <- ode(y = 0, times = 0:100, func = equation_2, parms2)
@@ -137,3 +136,31 @@ for(j in x)
     arrows(domain[1],z[1],domain[2],z[2],length=0.08, col = "blue")
   }
 }
+
+
+
+
+
+# Just integration --------------------------------------------------------
+
+
+# Change Inf argument to the upper and lower end of the integrate 
+
+func_e1 <- function(y){
+  2*y
+}
+
+func_e1_sol <- integrate(func_e1, lower = -Inf, upper = Inf)
+print(func_e1_sol)
+
+
+func_e2 <- function(x){
+  2*x
+}
+
+func_e2_sol <- integrate(func_e2, lower = -Inf, upper = Inf)
+
+# -------------------------------------------------------------------------
+# differential_equations_adrian_janucik -----------------------------------
+# https://www.r-bloggers.com/generate-slope-fields-in-r-and-python/
+# https://www.youtube.com/watch?v=RkPGY7_2LQM
